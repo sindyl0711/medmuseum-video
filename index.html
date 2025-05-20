@@ -139,7 +139,6 @@
     const iframe = document.getElementById('lightbox-iframe');
     iframe.src = "https://www.youtube.com/embed/" + videoId + "?autoplay=1";
     document.getElementById('lightbox').classList.add('active');
-    sendHeight(); // ← 加上這行
   }
 
   function closeLightbox() {
@@ -152,8 +151,6 @@
   document.getElementById('lightbox').addEventListener('click', function(e) {
     if (e.target === this) closeLightbox();
   });
-    
-  iFrameResize({ log: false }, '#my-iframe');
 
 </script>
 
