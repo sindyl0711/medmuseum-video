@@ -59,7 +59,14 @@
     .swiper-button-prev,
     .swiper-button-next {
       color: #fff;
-      text-shadow: 0 4px 12px rgba(0,0,0,0.06);
+      text-shadow: 0 0 8px rgba(0,0,0,0.6);
+      font-size: 20px; /* 可調整大小 */
+      transition: transform 0.2s ease;
+    }
+    
+    .swiper-button-prev:hover,
+    .swiper-button-next:hover {
+      transform: scale(1.1); /* 放大一點點當 hover */
     }
 
     /* Lightbox styles */
