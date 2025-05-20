@@ -1,67 +1,153 @@
 <!DOCTYPE html>
 <html lang="zh-Hant">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>影片導覽</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>影片牆＋燈箱播放</title>
   <style>
+    * {
+      box-sizing: border-box;
+    }
     body {
       margin: 0;
       font-family: sans-serif;
-      background: #fff;
+      background-color: #f5f5f5;
       color: #333;
     }
-
-    .container {
-      max-width: 960px;
-      margin: 40px auto;
-      padding: 0 20px;
-      display: flex;
-      flex-wrap: wrap;
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
       gap: 20px;
+      padding: 40px 20px;
+      max-width: 1200px;
+      margin: auto;
+    }
+    .video-card {
+      background: #fff;
+      border-radius: 16px;
+      overflow: hidden;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.06);
+      cursor: pointer;
+      transition: transform 0.2s;
+    }
+    .video-card:hover {
+      transform: scale(1.02);
+    }
+    .video-card img {
+      width: 100%;
+      display: block;
+    }
+    .video-info {
+      padding: 16px;
+    }
+    .video-info h3 {
+      margin: 0 0 8px;
+      font-size: 1.1rem;
+    }
+    .video-info p {
+      margin: 0;
+      font-size: 0.95rem;
+      color: #555;
     }
 
-    .video {
-      flex: 2 1 300px;
+    /* Lightbox styles */
+    .lightbox {
+      display: none;
+      position: fixed;
+      z-index: 999;
+      top: 0; left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0,0,0,0.8);
+      justify-content: center;
+      align-items: center;
+      padding: 20px;
+    }
+    .lightbox.active {
+      display: flex;
+    }
+    .lightbox-content {
       position: relative;
+      max-width: 90%;
+      width: 720px;
+      background: #000;
+      border-radius: 12px;
+      overflow: hidden;
       aspect-ratio: 16 / 9;
     }
-
-    .video iframe {
-      position: absolute;
-      top: 0; left: 0;
+    .lightbox iframe {
       width: 100%;
       height: 100%;
       border: 0;
     }
-
-    .description {
-      flex: 1 1 260px;
-      font-size: 1rem;
+    .close-btn {
+      position: absolute;
+      top: -40px;
+      right: 0;
+      font-size: 32px;
+      color: white;
+      cursor: pointer;
     }
 
     @media (max-width: 640px) {
-      .container {
-        flex-direction: column;
+      .lightbox-content {
+        width: 100%;
+        max-height: 80vh;
       }
     }
   </style>
 </head>
 <body>
-  <div class="container">
-    <div class="video">
-      <iframe 
-        src="https://www.youtube.com/embed/videoseries?list=PLzfMla_3JyzutSll3NQtbEpcXWwH-JOI4" 
-        allowfullscreen>
-      </iframe>
+
+  <div class="grid">
+    <div class="video-card" onclick="openLightbox('YTD976VZ7bY')">
+      <img src="https://img.youtube.com/vi/YTD976VZ7bY/hqdefault.jpg" alt="吳嘉苓老師導覽">
+      <div class="video-info">
+        <h3>吳嘉苓老師導覽</h3>
+        <p>策展人介紹展覽核心概念</p>
+      </div>
     </div>
-    <div class="description">
-      <ul>
-        <li>吳嘉苓老師現場導覽</li>
-        <li>洪文玲老師現場導覽</li>
-        <li>廖小熊老師影像紀錄</li>
-      </ul>
+    <div class="video-card" onclick="openLightbox('04uVwCwmdHA')">
+      <img src="https://img.youtube.com/vi/04uVwCwmdHA/hqdefault.jpg" alt="洪文玲老師導覽">
+      <div class="video-info">
+        <h3>洪文玲老師導覽</h3>
+        <p>展品故事與歷史脈絡說明</p>
+      </div>
+    </div>
+    <div class="video-card" onclick="openLightbox('VKavLz8D1IU')">
+      <img src="https://img.youtube.com/vi/VKavLz8D1IU/hqdefault.jpg" alt="廖小熊老師紀錄">
+      <div class="video-info">
+        <h3>廖小熊老師紀錄</h3>
+        <p>紀錄展覽佈展與開幕實況</p>
+      </div>
     </div>
   </div>
+
+  <div class="lightbox" id="lightbox">
+    <div class="lightbox-content">
+      <span class="close-btn" onclick="closeLightbox()">&times;</span>
+      <iframe id="lightbox-iframe" src="" allowfullscreen></iframe>
+    </div>
+  </div>
+
+  <script>
+    function openLightbox(videoId) {
+      const iframe = document.getElementById('lightbox-iframe');
+      iframe.src = "https://www.youtube.com/embed/" + videoId + "?autoplay=1";
+      document.getElementById('lightbox').classList.add('active');
+    }
+
+    function closeLightbox() {
+      const iframe = document.getElementById('lightbox-iframe');
+      iframe.src = "";
+      document.getElementById('lightbox').classList.remove('active');
+    }
+
+    // Optional: Close when clicking outside video
+    document.getElementById('lightbox').addEventListener('click', function(e) {
+      if (e.target === this) closeLightbox();
+    });
+  </script>
+
 </body>
 </html>
