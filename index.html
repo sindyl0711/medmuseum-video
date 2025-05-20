@@ -11,7 +11,6 @@
     }
     body {
       margin: 0;
-      height: 100%;
       font-family: sans-serif;
       background-color: #fff;
       color: #333;
@@ -60,12 +59,11 @@
       z-index: 999;
       top: 0; left: 0;
       width: 100vw;
-      height: 100dvh;
+      height: 100vh;
       background: rgba(0,0,0,0.8);
       justify-content: center;
       align-items: center;
       padding: 20px;
-      position: absolute;
     }
     .lightbox.active {
       display: flex;
@@ -91,6 +89,15 @@
       font-size: 32px;
       color: white;
       cursor: pointer;
+    }
+
+    /* NEW: Lightbox spacer to force iframe resize */
+    .lightbox-spacer {
+      height: 0;
+      transition: height 0.3s ease;
+    }
+    .lightbox-spacer.active {
+      height: 100vh;
     }
 
     @media (max-width: 768px) {
@@ -127,6 +134,9 @@
     </div>
   </div>
 
+  <!-- NEW: 空的 spacer，用來在燈箱開啟時撐開頁面高度 -->
+  <div class="lightbox-spacer" id="lightbox-spacer"></div>
+
   <div class="lightbox" id="lightbox">
     <div class="lightbox-content">
       <span class="close-btn" onclick="closeLightbox()">&times;</span>
@@ -135,31 +145,25 @@
   </div>
 
   <script>
-  function openLightbox(videoId) {
-    const iframe = document.getElementById('lightbox-iframe');
-    iframe.src = "https://www.youtube.com/embed/" + videoId + "?autoplay=1";
-    document.getElementById('lightbox').classList.add('active');
-    // 強制撐高整個 body，讓 iframe 顯示完整
-    document.body.style.height = '100vh';
-    document.documentElement.style.height = '100vh';
-  }
+    function openLightbox(videoId) {
+      const iframe = document.getElementById('lightbox-iframe');
+      iframe.src = "https://www.youtube.com/embed/" + videoId + "?autoplay=1";
+      document.getElementById('lightbox').classList.add('active');
+      document.getElementById('lightbox-spacer').classList.add('active');
+    }
 
-  function closeLightbox() {
-    const iframe = document.getElementById('lightbox-iframe');
-    iframe.src = "";
-    document.getElementById('lightbox').classList.remove('active');
-      // 關燈箱後恢復原狀
-    document.body.style.height = '';
-    document.documentElement.style.height = '';
-  }
+    function closeLightbox() {
+      const iframe = document.getElementById('lightbox-iframe');
+      iframe.src = "";
+      document.getElementById('lightbox').classList.remove('active');
+      document.getElementById('lightbox-spacer').classList.remove('active');
+    }
 
-  // Optional: Close when clicking outside video
-  document.getElementById('lightbox').addEventListener('click', function(e) {
-    if (e.target === this) closeLightbox();
-  });
-
-</script>
-
+    // Optional: 點擊背景關閉
+    document.getElementById('lightbox').addEventListener('click', function(e) {
+      if (e.target === this) closeLightbox();
+    });
+  </script>
 
 </body>
 </html>
