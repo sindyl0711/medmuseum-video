@@ -4,6 +4,8 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>影片牆＋燈箱播放</title>
+  <script src="https://cdn.jsdelivr.net/npm/iframe-resizer/js/iframeResizer.contentWindow.min.js"></script>
+
   <style>
     * {
       box-sizing: border-box;
@@ -144,22 +146,15 @@
     const iframe = document.getElementById('lightbox-iframe');
     iframe.src = "";
     document.getElementById('lightbox').classList.remove('active');
-    sendHeight(); // ← 加上這行
   }
 
   // Optional: Close when clicking outside video
   document.getElementById('lightbox').addEventListener('click', function(e) {
     if (e.target === this) closeLightbox();
   });
+    
+  iFrameResize({ log: false }, '#my-iframe');
 
-  function sendHeight() {
-    const height = document.body.scrollHeight;
-    window.parent.postMessage({ type: 'setHeight', height: height }, '*');
-  }
-
-  // 初始與每次視窗尺寸變化時都送一次
-  window.addEventListener('load', sendHeight);
-  window.addEventListener('resize', sendHeight);
 </script>
 
 
