@@ -3,7 +3,13 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>影片牆＋燈箱播放</title>
+  <title>影片牆＋燈箱播放（滑動版）</title>
+
+  <!-- Swiper CSS -->
+  <link
+    rel="stylesheet"
+    href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css"
+  />
 
   <style>
     * {
@@ -14,17 +20,13 @@
       font-family: sans-serif;
       background-color: #fff;
       color: #333;
-      height: 100%;
     }
-    .grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-      gap: 20px;
+    .swiper {
       padding: 40px 20px;
       max-width: 1200px;
       margin: auto;
     }
-    .video-card {
+    .swiper-slide {
       background: #68A799;
       border-radius: 12px;
       overflow: hidden;
@@ -32,10 +34,10 @@
       cursor: pointer;
       transition: transform 0.2s;
     }
-    .video-card:hover {
+    .swiper-slide:hover {
       transform: scale(1.02);
     }
-    .video-card img {
+    .swiper-slide img {
       width: 100%;
       display: block;
     }
@@ -51,6 +53,11 @@
       margin: 0;
       font-size: 1rem;
       color: #fff;
+    }
+
+    .swiper-button-prev,
+    .swiper-button-next {
+      color: #333;
     }
 
     /* Lightbox styles */
@@ -91,53 +98,41 @@
       color: white;
       cursor: pointer;
     }
-
-    /* NEW: Lightbox spacer to force iframe resize */
-    .lightbox-spacer {
-      height: 0;
-      transition: height 0.3s ease;
-    }
-    .lightbox-spacer.active {
-      height: 100vh;
-    }
-
-    @media (max-width: 768px) {
-      .lightbox-content {
-        width: 100vw;
-        max-height: 80vh;
-      }
-    }
   </style>
 </head>
 <body>
 
-  <div class="grid">
-    <div class="video-card" onclick="openLightbox('YTD976VZ7bY')">
-      <img src="https://img.youtube.com/vi/YTD976VZ7bY/hqdefault.jpg" alt="吳嘉苓老師導覽">
-      <div class="video-info">
-        <h3>吳嘉苓老師導覽</h3>
-        <p>各方專家與策展人一同介紹展覽核心概念</p>
+  <div class="swiper">
+    <div class="swiper-wrapper">
+      <div class="swiper-slide" onclick="openLightbox('YTD976VZ7bY')">
+        <img src="https://img.youtube.com/vi/YTD976VZ7bY/hqdefault.jpg" alt="吳嘉苓老師導覽">
+        <div class="video-info">
+          <h3>吳嘉苓老師導覽</h3>
+          <p>各方專家與策展人一同介紹展覽核心概念</p>
+        </div>
+      </div>
+      <div class="swiper-slide" onclick="openLightbox('BXqBWP0z3HA')">
+        <img src="https://img.youtube.com/vi/BXqBWP0z3HA/hqdefault.jpg" alt="洪文玲老師導覽">
+        <div class="video-info">
+          <h3>洪文玲老師導覽</h3>
+          <p>專家導覽與展品摘要介紹</p>
+        </div>
+      </div>
+      <div class="swiper-slide" onclick="openLightbox('oDQFsT2ZEN0')">
+        <img src="https://img.youtube.com/vi/oDQFsT2ZEN0/hqdefault.jpg" alt="廖小熊老師紀錄">
+        <div class="video-info">
+          <h3>廖小熊老師紀錄</h3>
+          <p>專業設計師視角看展覽</p>
+        </div>
       </div>
     </div>
-    <div class="video-card" onclick="openLightbox('BXqBWP0z3HA')">
-      <img src="https://img.youtube.com/vi/BXqBWP0z3HA/hqdefault.jpg" alt="洪文玲老師導覽">
-      <div class="video-info">
-        <h3>洪文玲老師導覽</h3>
-        <p>專家導覽與展品摘要介紹</p>
-      </div>
-    </div>
-    <div class="video-card" onclick="openLightbox('oDQFsT2ZEN0')">
-      <img src="https://img.youtube.com/vi/oDQFsT2ZEN0/hqdefault.jpg" alt="廖小熊老師紀錄">
-      <div class="video-info">
-        <h3>廖小熊老師紀錄</h3>
-        <p>專業設計師視角看展覽</p>
-      </div>
-    </div>
+
+    <!-- 左右箭頭 -->
+    <div class="swiper-button-prev"></div>
+    <div class="swiper-button-next"></div>
   </div>
 
-  <!-- NEW: 空的 spacer，用來在燈箱開啟時撐開頁面高度 -->
-  <div class="lightbox-spacer" id="lightbox-spacer"></div>
-
+  <!-- 燈箱 -->
   <div class="lightbox" id="lightbox">
     <div class="lightbox-content">
       <span class="close-btn" onclick="closeLightbox()">&times;</span>
@@ -145,26 +140,51 @@
     </div>
   </div>
 
+  <!-- Swiper JS -->
+  <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
+
   <script>
+    // 初始化 Swiper
+    const swiper = new Swiper('.swiper', {
+      loop: true,
+      autoplay: {
+        delay: 5000,
+      },
+      navigation: {
+        nextEl: '.swiper-button-next',
+        prevEl: '.swiper-button-prev',
+      },
+      breakpoints: {
+        0: {
+          slidesPerView: 1,
+          spaceBetween: 20
+        },
+        768: {
+          slidesPerView: 2,
+          spaceBetween: 20
+        },
+        1024: {
+          slidesPerView: 3,
+          spaceBetween: 20
+        }
+      }
+    });
+
     function openLightbox(videoId) {
       const iframe = document.getElementById('lightbox-iframe');
       iframe.src = "https://www.youtube.com/embed/" + videoId + "?autoplay=1";
       document.getElementById('lightbox').classList.add('active');
-      document.getElementById('lightbox-spacer').classList.add('active');
     }
 
     function closeLightbox() {
       const iframe = document.getElementById('lightbox-iframe');
       iframe.src = "";
       document.getElementById('lightbox').classList.remove('active');
-      document.getElementById('lightbox-spacer').classList.remove('active');
     }
 
-    // Optional: 點擊背景關閉
     document.getElementById('lightbox').addEventListener('click', function(e) {
       if (e.target === this) closeLightbox();
     });
   </script>
-
 </body>
 </html>
