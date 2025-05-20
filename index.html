@@ -4,7 +4,6 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>影片牆＋燈箱播放</title>
-  <script src="https://cdn.jsdelivr.net/npm/iframe-resizer/js/iframeResizer.contentWindow.min.js"></script>
 
   <style>
     * {
@@ -66,6 +65,7 @@
       justify-content: center;
       align-items: center;
       padding: 20px;
+      position: absolute;
     }
     .lightbox.active {
       display: flex;
@@ -139,12 +139,18 @@
     const iframe = document.getElementById('lightbox-iframe');
     iframe.src = "https://www.youtube.com/embed/" + videoId + "?autoplay=1";
     document.getElementById('lightbox').classList.add('active');
+    // 強制撐高整個 body，讓 iframe 顯示完整
+    document.body.style.height = '100vh';
+    document.documentElement.style.height = '100vh';
   }
 
   function closeLightbox() {
     const iframe = document.getElementById('lightbox-iframe');
     iframe.src = "";
     document.getElementById('lightbox').classList.remove('active');
+      // 關燈箱後恢復原狀
+    document.body.style.height = '';
+    document.documentElement.style.height = '';
   }
 
   // Optional: Close when clicking outside video
